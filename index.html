@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmzy — Farm-fresh, in 2 hours</title>
+<meta name="description" content="Farmzy connects farmers on the edge of your city straight to your kitchen. Picked this morning, delivered within two hours — no mandi, no middlemen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%231B4332'/%3E%3Ctext x='50' y='64' font-size='52' text-anchor='middle' fill='%23E7A33E'%3EF%3C/text%3E%3C/svg%3E">
+<style>
+
+  /* ---------- Tokens ---------- */
+  :root{
+    --forest:      #1B4332;
+    --forest-deep: #12301F;
+    --vine:        #3A7D53;
+    --vine-light:  #6FAE6F;
+    --gold:        #E7A33E;
+    --rust:        #C1442E;
+    --paper:       #F6F1E4;
+    --paper-dim:   #EFE8D6;
+    --ink:         #1B2B22;
+    --ink-soft:    #4A5A50;
+    --cream:       #FBF8F0;
+    --line:        #D9CFB6;
+
+    --display: "Fraunces", Georgia, serif;
+    --body:    "Inter", -apple-system, sans-serif;
+    --mono:    "IBM Plex Mono", monospace;
+
+    --wrap: 1180px;
+    --radius: 18px;
+    --ease: cubic-bezier(.22,.9,.3,1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--body);
+    color:var(--ink);
+    background:var(--cream);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  button{font:inherit; cursor:pointer;}
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:0 28px;}
+
+  :focus-visible{outline:3px solid var(--gold); outline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  h1,h2,h3{font-family:var(--display); font-weight:600; line-height:1.05; letter-spacing:-0.01em; color:var(--forest);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; display:inline-block;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:15px 28px; border-radius:100px; font-weight:600; font-size:15px;
+    border:2px solid transparent; transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{ background:var(--gold); color:var(--forest-deep); box-shadow:0 6px 0 #B27821; }
+  .btn-primary:hover{ box-shadow:0 8px 0 #B27821; }
+  .btn-primary:active{ transform:translateY(2px); box-shadow:0 3px 0 #B27821; }
+  .btn-outline{ border-color:currentColor; color:var(--paper); }
+  .btn-outline:hover{ background:rgba(255,255,255,.08); }
+  .btn-ghost{ color:var(--forest); font-family:var(--mono); font-size:13px; letter-spacing:.05em; text-transform:uppercase; gap:6px; }
+  .btn-ghost .arrow{ transition:transform .3s var(--ease); }
+  .btn-ghost:hover .arrow{ transform:translateY(4px); }
+  .hero .btn-ghost{ color:var(--paper); }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:18px 0;
+    transition:background .35s var(--ease), padding .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  header.scrolled{ background:rgba(27,67,50,.92); backdrop-filter:blur(10px); padding:12px 0; box-shadow:0 8px 24px rgba(0,0,0,.15); }
+  nav{ display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:21px; color:var(--paper); }
+  .logo-mark{ width:34px; height:34px; border-radius:50%; background:var(--gold); display:flex; align-items:center; justify-content:center; color:var(--forest-deep); font-family:var(--display); font-weight:700; font-size:17px; flex:none; }
+  .nav-links{ display:flex; align-items:center; gap:32px; }
+  .nav-links a{ font-size:14px; font-weight:500; color:var(--paper); opacity:.85; transition:opacity .2s; }
+  .nav-links a:hover{ opacity:1; }
+  .nav-cta{ display:flex; align-items:center; gap:18px; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; background:radial-gradient(120% 90% at 15% 0%, #234E3A 0%, var(--forest) 45%, var(--forest-deep) 100%);
+    padding:168px 0 120px; overflow:hidden; color:var(--paper);
+  }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr .85fr; gap:56px; align-items:center; }
+  .hero h1{ font-size:clamp(40px,5.4vw,68px); color:var(--paper); margin:22px 0 24px; }
+  .hero h1 em{ font-style:italic; color:var(--gold); font-weight:500; }
+  .hero .eyebrow{ color:var(--gold); }
+  .hero p.lede{ font-size:18px; line-height:1.6; color:#DCE9DF; max-width:480px; margin-bottom:36px; }
+  .hero-ctas{ display:flex; align-items:center; gap:26px; flex-wrap:wrap; margin-bottom:56px; }
+  .trust-strip{ display:flex; gap:28px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px; color:#B9CFC0; letter-spacing:.03em; }
+  .trust-strip span{ display:flex; align-items:center; gap:8px; }
+  .trust-strip span::before{ content:"✓"; color:var(--vine-light); font-weight:700; }
+
+  /* Stamp badge (signature element) */
+  .stamp-wrap{ position:relative; display:flex; align-items:center; justify-content:center; }
+  .stamp{
+    width:min(360px, 78vw); height:min(360px, 78vw); position:relative;
+    animation: spin 34s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .stamp-ring{ position:absolute; inset:0; }
+  .stamp-core{
+    position:absolute; inset:18%; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #2E6349, var(--forest-deep) 75%);
+    border:3px solid var(--gold);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px;
+    box-shadow: 0 0 0 10px rgba(231,163,62,0.08), inset 0 0 40px rgba(0,0,0,.35);
+  }
+  .stamp-core .fz{ font-family:var(--display); font-weight:700; font-size:15px; color:var(--paper); text-align:center; }
+  .stamp-core .clock{ font-family:var(--mono); font-size:12px; color:var(--gold); letter-spacing:.08em; }
+  .stamp-core .leaf{ width:30px; height:30px; opacity:.9; }
+  .route-dot{ position:absolute; width:10px; height:10px; border-radius:50%; background:var(--gold); offset-path: circle(41% at 50% 50%); animation: orbit 6s linear infinite; box-shadow:0 0 10px var(--gold); }
+  @keyframes orbit{ from{ offset-distance:0%; } to{ offset-distance:100%; } }
+
+  /* ---------- Section shells ---------- */
+  section{ padding:110px 0; }
+  .section-head{ max-width:680px; margin-bottom:56px; }
+  .section-head .eyebrow{ color:var(--rust); margin-bottom:16px; }
+  .section-head h2{ font-size:clamp(30px,3.6vw,44px); }
+  .section-head p{ margin-top:16px; font-size:16.5px; color:var(--ink-soft); line-height:1.6; max-width:560px; }
+  .light{ background:var(--paper); }
+  .dark{ background:var(--forest-deep); color:var(--paper); }
+  .dark h2{ color:var(--paper); }
+  .dark .section-head p{ color:#C7D9CC; }
+
+  /* ---------- Comparison strip ---------- */
+  .compare{ display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:stretch; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--cream); }
+  .compare-col{ padding:36px 34px; display:flex; flex-direction:column; }
+  .compare-col.old{ background:#EFE6DA; }
+  .compare-col.new{ background:var(--forest); color:var(--paper); justify-content:center; }
+  .compare-col h3{ font-size:13px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.1em; margin-bottom:22px; color:inherit; opacity:.7; }
+  .compare-col.new h3{ opacity:.85; color:var(--gold); }
+  .hop-list{ display:flex; flex-direction:column; gap:0; }
+  .hop{ display:flex; align-items:center; gap:14px; padding:10px 0; font-size:15px; font-weight:500; border-bottom:1px dashed rgba(0,0,0,.12); }
+  .compare-col.new .hop{ border-bottom:1px dashed rgba(255,255,255,.18); }
+  .hop:last-child{ border-bottom:none; }
+  .compare-col.old .compare-foot{ margin-top:auto; }
+  .compare-col.new .compare-foot{ border-top:1px solid rgba(255,255,255,.18); margin-top:26px; }
+  .hop-num{ font-family:var(--mono); font-size:12px; opacity:.55; width:18px; }
+  .compare-foot{ margin-top:26px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:13px; padding-top:18px; border-top:1px solid rgba(0,0,0,.12); }
+  .compare-foot b{ font-size:20px; display:block; font-family:var(--display); font-weight:700; }
+  .compare-mid{ display:flex; align-items:center; justify-content:center; width:64px; background:var(--paper-dim); color:var(--rust); font-family:var(--mono); font-size:12px; writing-mode:vertical-rl; letter-spacing:.1em; }
+
+  /* ---------- How it works: ticket stubs ---------- */
+  .tickets{ display:grid; grid-template-columns:repeat(3,1fr); gap:34px; counter-reset:step; position:relative; }
+  .tickets::before{
+    content:""; position:absolute; top:74px; left:8%; right:8%; height:0;
+    border-top:2px dashed var(--line); z-index:0;
+  }
+  .ticket{
+    position:relative; background:var(--cream); border:1.5px solid var(--line); border-radius:14px;
+    padding:30px 26px 34px; z-index:1;
+    opacity:0; transform:translateY(26px); transition:opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  .ticket.in-view{ opacity:1; transform:translateY(0); }
+  .ticket::after{
+    content:""; position:absolute; left:0; right:0; bottom:-11px; height:22px;
+    background-image: radial-gradient(circle at 11px 0, transparent 11px, var(--paper) 12px);
+    background-size:22px 22px; background-repeat:repeat-x;
+  }
+  .light .ticket::after{ background-image: radial-gradient(circle at 11px 0, transparent 11px, var(--paper) 12px); }
+  .ticket-num{
+    width:44px; height:44px; border-radius:50%; background:var(--forest); color:var(--gold);
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:14px; font-weight:600;
+    margin-bottom:20px;
+  }
+  .ticket h3{ font-size:21px; margin-bottom:10px; }
+  .ticket p{ color:var(--ink-soft); font-size:14.5px; line-height:1.6; margin-bottom:18px; }
+  .ticket .stamp-time{ font-family:var(--mono); font-size:12px; color:var(--rust); letter-spacing:.06em; display:flex; align-items:center; gap:8px; padding-top:16px; border-top:1px dashed var(--line); }
+
+  /* ---------- Why cards ---------- */
+  .why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:26px; }
+  .why-card{
+    padding:32px 24px; border-radius:16px; background:var(--forest); position:relative; overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    opacity:0; transform:translateY(20px); transition:opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .why-card.in-view{ opacity:1; transform:translateY(0); }
+  .why-card:nth-child(2){ background:var(--vine); }
+  .why-card:nth-child(3){ background:#2E6349; }
+  .why-card:nth-child(4){ background:#255741; border-color:rgba(255,255,255,.14); }
+  .why-icon{ width:46px; height:46px; border-radius:50%; background:var(--gold); color:var(--forest-deep); display:flex; align-items:center; justify-content:center; margin-bottom:20px; font-size:20px; font-weight:700; }
+  .why-card h3{ color:var(--paper); font-size:18px; margin-bottom:10px; }
+  .why-card p{ color:#D9E7DC; font-size:14px; line-height:1.6; }
+
+  /* ---------- Coverage ---------- */
+  .coverage-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .village-chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+  .chip{ padding:9px 16px; border-radius:100px; border:1.5px dashed var(--vine); font-family:var(--mono); font-size:12.5px; color:var(--forest); background:var(--paper-dim); }
+  .chip.soon{ opacity:.55; border-style:dotted; }
+  .city-card{
+    background:var(--forest); border-radius:20px; padding:44px; color:var(--paper); position:relative;
+  }
+  .city-card .eyebrow{ color:var(--gold); margin-bottom:14px; }
+  .city-card h3{ color:var(--paper); font-size:30px; margin-bottom:12px; }
+  .city-card p{ color:#CBDFD1; font-size:14.5px; line-height:1.65; margin-bottom:22px; }
+  .radar{
+    width:100%; aspect-ratio:1; border-radius:50%; border:1px dashed rgba(231,163,62,.35);
+    position:relative; margin-bottom:6px;
+  }
+  .radar::before,.radar::after{ content:""; position:absolute; border-radius:50%; border:1px dashed rgba(231,163,62,.2); }
+  .radar::before{ inset:20%; }
+  .radar::after{ inset:38%; }
+  .radar .pin{ position:absolute; width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 5px rgba(231,163,62,.18); }
+  .radar .pin.hub{ width:14px; height:14px; background:var(--rust); top:50%; left:50%; transform:translate(-50%,-50%); box-shadow:0 0 0 6px rgba(193,68,46,.25); }
+
+  /* ---------- CTA / signup ---------- */
+  .cta-section{ background:var(--forest-deep); color:var(--paper); text-align:center; position:relative; overflow:hidden; }
+  .cta-section::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(60% 60% at 50% 0%, rgba(231,163,62,.14), transparent 70%);
+  }
+  .cta-inner{ position:relative; max-width:600px; margin:0 auto; }
+  .cta-inner h2{ color:var(--paper); font-size:clamp(30px,4vw,46px); margin-bottom:16px; }
+  .cta-inner p{ color:#C7D9CC; font-size:16.5px; margin-bottom:36px; }
+  .signup-form{ display:flex; gap:12px; max-width:440px; margin:0 auto; flex-wrap:wrap; justify-content:center; }
+  .signup-form input{
+    flex:1; min-width:220px; padding:15px 20px; border-radius:100px; border:1.5px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.06); color:var(--paper); font-size:15px; font-family:var(--body);
+  }
+  .signup-form input::placeholder{ color:#9FB6A8; }
+  .signup-form input:focus{ border-color:var(--gold); background:rgba(255,255,255,.1); }
+  .form-note{ margin-top:16px; font-family:var(--mono); font-size:12px; color:#8FA898; }
+  .form-success{ display:none; font-family:var(--mono); font-size:14px; color:var(--gold); margin-top:18px; }
+  .form-success.show{ display:block; }
+
+  /* ---------- Footer ---------- */
+  footer{ background:var(--forest-deep); color:#9FB6A8; padding:70px 0 30px; border-top:1px solid rgba(255,255,255,.08); }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:50px; }
+  .footer-logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:20px; color:var(--paper); margin-bottom:14px; }
+  .footer-tag{ font-size:14px; line-height:1.6; max-width:260px; color:#8FA898; }
+  .footer-col h4{ font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  .footer-col a{ display:block; font-size:14px; padding:6px 0; color:#B9CFC0; transition:color .2s; }
+  .footer-col a:hover{ color:var(--paper); }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; padding-top:26px; border-top:1px solid rgba(255,255,255,.08); font-size:12.5px; font-family:var(--mono); flex-wrap:wrap; gap:12px; }
+
+  /* ---------- Reveal utility ---------- */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .hero-grid{ grid-template-columns:1fr; gap:64px; }
+    .stamp-wrap{ order:-1; }
+    .stamp{ margin:0 auto; }
+    .why-grid{ grid-template-columns:1fr 1fr; }
+    .coverage-wrap{ grid-template-columns:1fr; }
+    .footer-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:760px){
+    .nav-links{ display:none; }
+    .hero{ padding:140px 0 90px; }
+    .tickets{ grid-template-columns:1fr; }
+    .tickets::before{ display:none; }
+    .compare{ grid-template-columns:1fr; }
+    .compare-mid{ writing-mode:horizontal-tb; width:100%; padding:10px 0; }
+    .why-grid{ grid-template-columns:1fr; }
+    section{ padding:76px 0; }
+    .footer-grid{ grid-template-columns:1fr 1fr; gap:30px; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <nav class="wrap">
+    <a href="#top" class="logo"><span class="logo-mark">F</span>farmzy</a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#why">Why Farmzy</a></li>
+      <li><a href="#coverage">Coverage</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#signup" class="btn btn-primary" style="padding:11px 22px; font-size:14px;">Get early access</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Farm stamp no. 001 — fresh on arrival</span>
+        <h1>Picked this morning.<br>On your counter <em>by lunch.</em></h1>
+        <p class="lede">Farmzy connects farms on the edge of your city straight to your kitchen — no mandi, no middlemen, no missing days. Every order lands within two hours of being picked.</p>
+        <div class="hero-ctas">
+          <a href="#signup" class="btn btn-primary">Get early access</a>
+          <a href="#how" class="btn btn-ghost">See how it works <span class="arrow">↓</span></a>
+        </div>
+        <div class="trust-strip">
+          <span>Farm-priced, not mandi-marked-up</span>
+          <span>Farmers paid fairly</span>
+          <span>2-hour delivery window</span>
+        </div>
+      </div>
+
+      <div class="stamp-wrap">
+        <div class="stamp">
+          <svg class="stamp-ring" viewBox="0 0 300 300">
+            <defs>
+              <path id="ringPath" d="M 150,150 m -128,0 a 128,128 0 1,1 256,0 a 128,128 0 1,1 -256,0" />
+            </defs>
+            <circle cx="150" cy="150" r="145" fill="none" stroke="#E7A33E" stroke-width="1.5" stroke-dasharray="2 7" opacity="0.55"/>
+            <text font-family="IBM Plex Mono, monospace" font-size="12.5" letter-spacing="3" fill="#E7A33E">
+              <textPath href="#ringPath" startOffset="0%">FARM FRESH • DELIVERED IN 2 HOURS • FARM FRESH • DELIVERED IN 2 HOURS •</textPath>
+            </text>
+          </svg>
+          <div class="route-dot" aria-hidden="true"></div>
+          <div class="stamp-core">
+            <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="#E7A33E" stroke-width="1.6"><path d="M12 21c-4-1-8-5-8-11 6 0 8 3 8 3s2-3 8-3c0 6-4 10-8 11Z"/><path d="M12 21V9"/></svg>
+            <span class="fz">FARMZY</span>
+            <span class="clock">EST. 2026 · BENGALURU</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="light">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">The old road vs. the short road</span>
+        <h2>Five hops become one.</h2>
+        <p>Every extra hand a vegetable passes through adds a day of age and a markup nobody asked for. Farmzy removes the hops in between.</p>
+      </div>
+
+      <div class="compare reveal">
+        <div class="compare-col old">
+          <h3>The mandi route</h3>
+          <div class="hop-list">
+            <div class="hop"><span class="hop-num">01</span>Farmer</div>
+            <div class="hop"><span class="hop-num">02</span>Local agent</div>
+            <div class="hop"><span class="hop-num">03</span>Wholesale mandi</div>
+            <div class="hop"><span class="hop-num">04</span>Wholesaler</div>
+            <div class="hop"><span class="hop-num">05</span>Retailer → You</div>
+          </div>
+          <div class="compare-foot"><span>Time to your kitchen<b>3–5 days</b></span></div>
+        </div>
+        <div class="compare-mid">VS</div>
+        <div class="compare-col new">
+          <h3>The Farmzy route</h3>
+          <div class="hop-list">
+            <div class="hop"><span class="hop-num">01</span>Farmer</div>
+            <div class="hop"><span class="hop-num">02</span>Farmzy micro-hub</div>
+            <div class="hop"><span class="hop-num">03</span>You</div>
+          </div>
+          <div class="compare-foot"><span>Time to your kitchen<b>Under 2 hours</b></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="light" id="how" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>Three stubs, one morning.</h2>
+        <p>Every order is stamped at each stop, so you always know exactly how fresh your basket is — down to the minute.</p>
+      </div>
+
+      <div class="tickets">
+        <div class="ticket">
+          <div class="ticket-num">01</div>
+          <h3>You order</h3>
+          <p>Pick your basket the night before or first thing in the morning — whatever's listed as available from that day's harvest.</p>
+          <div class="stamp-time">⏱ Order placed · 6:40 AM</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-num">02</div>
+          <h3>It's picked & sorted</h3>
+          <p>Farmers harvest to order and hand off at the village micro-hub, where it's graded and packed within the hour.</p>
+          <div class="stamp-time">⏱ Picked & packed · 7:10 AM</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-num">03</div>
+          <h3>It's on your counter</h3>
+          <p>A short, direct route from hub to door — no detours through a mandi, no waiting for a truck to fill up.</p>
+          <div class="stamp-time">⏱ Delivered · 8:35 AM</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY FARMZY -->
+  <section class="dark" id="why">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow" style="color:var(--gold);">Why Farmzy</span>
+        <h2>Built to earn trust on both ends.</h2>
+        <p>Consumers get produce that's hours old, not days. Farmers get a fair price without giving up half of it to agents along the way.</p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">✓</div>
+          <h3>Know your farm</h3>
+          <p>Every basket is tagged with the village and farmer it came from — no anonymous mandi produce.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">₹</div>
+          <h3>Fair to farmers</h3>
+          <p>Transparent pricing, paid directly — without four sets of hands taking a cut in between.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⏱</div>
+          <h3>Actually fresh</h3>
+          <p>Harvested the same morning it's delivered — not sitting in a warehouse for half a week.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">→</div>
+          <h3>One straight route</h3>
+          <p>No mandi, no wholesaler, no idle days in transit — just farm, hub, and your door.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COVERAGE -->
+  <section class="light" id="coverage">
+    <div class="wrap coverage-wrap">
+      <div class="reveal">
+        <span class="eyebrow">Where we're planting roots</span>
+        <h2 style="margin-top:16px;">Starting close to home, on purpose.</h2>
+        <p style="margin-top:16px; color:var(--ink-soft); font-size:16px; line-height:1.65;">We're launching with one city and the farm belt around it — dense enough to make a two-hour promise real, before we ever add a second city.</p>
+        <div class="village-chips">
+          <span class="chip">Bengaluru</span>
+          <span class="chip soon">Doddaballapur</span>
+          <span class="chip soon">Hoskote</span>
+          <span class="chip soon">Nelamangala</span>
+          <span class="chip soon">More villages soon</span>
+        </div>
+      </div>
+
+      <div class="city-card reveal">
+        <span class="eyebrow">Pilot city</span>
+        <h3>Bengaluru</h3>
+        <p>Sourcing from farms on the city's northern edge, delivering into central neighbourhoods first — expanding zone by zone as more villages come online.</p>
+        <div class="radar" aria-hidden="true">
+          <span class="pin hub"></span>
+          <span class="pin" style="top:18%; left:62%;"></span>
+          <span class="pin" style="top:70%; left:24%;"></span>
+          <span class="pin" style="top:30%; left:20%;"></span>
+          <span class="pin" style="top:76%; left:68%;"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP CTA -->
+  <section class="cta-section" id="signup">
+    <div class="wrap cta-inner">
+      <span class="eyebrow" style="color:var(--gold); justify-content:center;">Be first through the gate</span>
+      <h2 style="margin-top:16px;">Get early access to Farmzy.</h2>
+      <p>We're onboarding our first farms and first households together. Leave your email and we'll let you know the moment your neighbourhood is live.</p>
+      <form class="signup-form" id="signupForm">
+        <label for="emailInput" class="visually-hidden" style="position:absolute; width:1px; height:1px; overflow:hidden;">Email address</label>
+        <input type="email" id="emailInput" placeholder="you@email.com" required>
+        <button type="submit" class="btn btn-primary">Notify me</button>
+      </form>
+      <p class="form-success" id="formSuccess">✓ You're on the list — we'll be in touch before launch.</p>
+      <p class="form-note">No spam. Just one email when Farmzy reaches your neighbourhood.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><span class="logo-mark">F</span>farmzy</div>
+        <p class="footer-tag">Farm-fresh produce, straight from the villages on your city's edge — delivered within two hours of picking.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#why">Why Farmzy</a>
+        <a href="#how">How it works</a>
+        <a href="#coverage">Coverage</a>
+      </div>
+      <div class="footer-col">
+        <h4>For farmers</h4>
+        <a href="mailto:farmers@farmzy.in">Sell on Farmzy</a>
+        <a href="mailto:hello@farmzy.in">Partner with us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@farmzy.in">hello@farmzy.in</a>
+        <a href="#signup">Get early access</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Farmzy. All rights reserved.</span>
+      <span>Made for the mandi-free morning.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky header state
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive:true });
+
+  // Scroll-reveal
+  const revealEls = document.querySelectorAll('.reveal, .ticket, .why-card');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in-view'));
+  }
+
+  // Signup form — static/no backend. Wire this up to your email service later
+  // (e.g. Mailchimp, Formspree, Google Sheets via Apps Script) by replacing
+  // the code below with a real fetch() POST call.
+  const form = document.getElementById('signupForm');
+  const success = document.getElementById('formSuccess');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value.trim();
+    if (!email) return;
+    form.style.display = 'none';
+    success.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
